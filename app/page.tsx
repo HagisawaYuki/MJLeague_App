@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react";
 import { searchAllUser } from "./api/user";
+import { Box, Text } from "@chakra-ui/react";
 
 type User = {
   id: string;
@@ -21,11 +22,11 @@ export default function Home() {
   },[]);
   
   return (
-    <div>
-      {users && <a>{users[0].name}</a>
+    <Box>
+      {users && <Text fontSize="2xl" color="blue">{users[0].name}</Text>
 
       }
       
-    </div>
+    </Box>
   );
 }
