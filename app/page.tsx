@@ -1,32 +1,22 @@
 "use client"
-import { useEffect, useState } from "react";
-import { searchAllUser } from "./api/user";
-import { Box, Text } from "@chakra-ui/react";
 
-type User = {
-  id: string;
-  name: string;
-  password: string;
-}
+import { Box, Link } from "@chakra-ui/react";
+
+
 
 export default function Home() {
-  const [users, setUsers] = useState<User[]>();
-  const init = async () => {
-    const _users = await searchAllUser();
-    setUsers(_users);
-
-  };
-
-  useEffect(() => {
-    init();
-  },[]);
+  
   
   return (
     <Box>
-      {users && <Text fontSize="2xl" color="blue">{users[0].name}</Text>
-
-      }
-      
+      <Box>
+        <Box>
+          <Link href="/login">ログイン</Link>
+        </Box>
+        <Box>
+          <Link href="/signup">サインアップ</Link>
+        </Box>
+      </Box>
     </Box>
   );
 }
