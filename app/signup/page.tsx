@@ -1,8 +1,8 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Input, Text } from "@chakra-ui/react";
-import { signOut, useSession } from "next-auth/react";
+// import { signOut, useSession } from "next-auth/react";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -12,12 +12,14 @@ export default function SignupPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    console.log("hh")
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, password }),
     });
 
+    console.log(res.ok)
     if (res.ok) {
       alert("登録成功！ログインしてください");
       router.push("/login");
@@ -27,14 +29,14 @@ export default function SignupPage() {
     }
   };
 
-  const { status } = useSession();
+  // const { status } = useSession();
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      // 既にログインしている場合はセッションをクリア
-      signOut({ redirect: false });
-    }
-  }, [status]);
+  // useEffect(() => {
+  //   if (status === 'authenticated') {
+  //     // 既にログインしている場合はセッションをクリア
+  //     signOut({ redirect: false });
+  //   }
+  // }, [status]);
 
   return (
     <Box display="flex" justifyContent='center'>

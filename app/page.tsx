@@ -1,21 +1,21 @@
 "use client"
 
 import { Box, Link } from "@chakra-ui/react";
-import { signOut, useSession } from "next-auth/react";
-import { useEffect } from "react";
+// import { signOut, useSession } from "next-auth/react";
+// import { useEffect } from "react";
 
 
 
 export default function Home() {
   
-  const { status } = useSession();
+  // const { status } = useSession();
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      // 既にログインしている場合はセッションをクリア
-      signOut({ redirect: false });
-    }
-  }, [status]);
+  // useEffect(() => {
+  //   if (status === 'authenticated') {
+  //     // 既にログインしている場合はセッションをクリア
+  //     signOut({ redirect: false });
+  //   }
+  // }, [status]);
   return (
     <Box>
       <Box>

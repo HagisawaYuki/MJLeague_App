@@ -1,19 +1,14 @@
 "use client"
 
 import { Box, Button, Input, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useState } from "react";
+import { signIn} from 'next-auth/react';
 import { useRouter } from "next/navigation";
 
 export default function Home() {
     const [name, setName] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const router = useRouter();
-    // const {
-    //     register,
-    //     handleSubmit
-    //     // formState: { errors },
-    // } = useForm<{name: string, password: string}>();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,14 +26,14 @@ export default function Home() {
           }
       };
 
-      const { status } = useSession();
+    //   const { status } = useSession();
 
-    useEffect(() => {
-        if (status === 'authenticated') {
-        // 既にログインしている場合はセッションをクリア
-        signOut({ redirect: false });
-        }
-    }, [status]);
+    // useEffect(() => {
+    //     if (status === 'authenticated') {
+    //     // 既にログインしている場合はセッションをクリア
+    //     signOut({ redirect: false });
+    //     }
+    // }, [status]);
   
   return (
     <Box display="flex" justifyContent='center'>
