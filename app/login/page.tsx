@@ -4,8 +4,6 @@ import { Box, Button, Input, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { signIn } from 'next-auth/react';
 import { useRouter } from "next/navigation";
-// import { hash } from 'bcryptjs';
-// import { editUserPassword } from "../api/user";
 
 export default function Home() {
     const [name, setName] = useState<string>("");
@@ -25,33 +23,13 @@ export default function Home() {
           username: name,
           password,
         });
-        console.log('signIn result:', res);
-    
-        // if (res?.ok) {
-        //   router.push('/');
-        // }
-        //  else {
-        //   alert('ログイン失敗');
-        // }
+
         if (!res?.ok) {
             alert('ログイン失敗');
           } else {
             router.push('/home');
           }
       };
-    //   useEffect(() => {
-        
-
-    //     // const createHashPassword = async () => {
-    //     //     const pass = "yuki0517";
-    //     //     const hashedPassword = await hash(pass, 10);
-
-    //     //     console.log(hashedPassword);
-
-    //     //     await editUserPassword("HagisawaYuki", hashedPassword);
-    //     // }
-    //     // createHashPassword();
-    //   },[])
   
   return (
     <Box display="flex" justifyContent='center'>

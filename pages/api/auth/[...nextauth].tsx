@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import prisma from '../../../lib/prisma';
 import { compare } from 'bcryptjs';
+import { searchUserByName } from '../../../app/api/user';
 
 export default NextAuth({
   providers: [
@@ -13,27 +14,19 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        console.log("AAAAA")
         if (!credentials?.username || !credentials?.password) {
-            // throw new Error('Email and password required');
-            return null;
+            throw new Error('Email and password required');
         }
-        const user = await prisma.user.findUnique({
-          where: { name: credentials.username },
-        });
         
-        console.log("user",user?.password);
-        console.log("credentials",credentials.password);
+        const user = await searchUserByName(credentials.username);
+        
         if (!user || !user.password) {
-            // throw new Error('ユーザーが存在しません')
-            return null;
+            throw new Error('ユーザーが存在しません')
         };
         
         const isValid = await compare(credentials.password, user.password);
-        console.log("isValid", isValid)
         if (!isValid) {
-            // throw new Error('パスワードが間違っています')
-            return null;
+            throw new Error('パスワードが間違っています')
         };
 
         return user; // セッションに含まれる

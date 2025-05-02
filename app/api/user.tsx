@@ -22,9 +22,18 @@ export const searchUserByID = async (id: string) => {
     return user;
 }
 
+export const createUser = async (name: string, hashedPassword: string) => {
+    await prisma.user.create({
+        data: {
+          name,
+          password: hashedPassword,
+        },
+    });
+}
+
 export const editUserPassword = async (name: string, password: string) => {
     await prisma.user.update({
-        where: { name }, // 編集対象のID
+        where: { name },
         data: {
             password: password
         },
