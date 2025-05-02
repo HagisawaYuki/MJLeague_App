@@ -1,4 +1,5 @@
 import { Provider } from "../components/ui/provider";
+import { Providers } from "./Providers";
 
 
 export default function RootLayout({
@@ -9,10 +10,11 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body>
+      <Providers>
         <Provider>
         {children}
         </Provider>
-        
+        </Providers>
       </body>
     </html>
   );
