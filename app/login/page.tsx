@@ -1,8 +1,8 @@
 "use client"
 
 import { Box, Button, Input, Text } from "@chakra-ui/react";
-import { useState } from "react";
-import { signIn } from 'next-auth/react';
+import { useEffect, useState } from "react";
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -30,6 +30,15 @@ export default function Home() {
             router.push('/home');
           }
       };
+
+      const { status } = useSession();
+
+    useEffect(() => {
+        if (status === 'authenticated') {
+        // 既にログインしている場合はセッションをクリア
+        signOut({ redirect: false });
+        }
+    }, [status]);
   
   return (
     <Box display="flex" justifyContent='center'>

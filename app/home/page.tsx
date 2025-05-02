@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 
 
@@ -15,8 +15,7 @@ export default function Home() {
   
   return (
     <Box>
-      <Text>home</Text>
-      <Text>ログインユーザー名: {session.user?.name}</Text>
+      
       
     </Box>
   );
