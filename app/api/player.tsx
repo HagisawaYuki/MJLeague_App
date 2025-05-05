@@ -17,6 +17,16 @@ export const searchAllPlayersByUserID = async (userID: string): Promise<PlayerWi
     return data;
 };
 
+export const searchPlayerByID = async (id: number): Promise<PlayerWithHanshuangScore> => {
+    const res = await fetch('/api/player', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      const data: PlayerWithHanshuangScore = await res.json();
+      return data;
+}
+
 
 
 // export const searchAllPlayersByUserID = async (userId: string): Promise<PlayerWithHanshuangScore[]> => {
