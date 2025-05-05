@@ -12,14 +12,12 @@ export default function SignupPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("hh")
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, password }),
     });
 
-    console.log(res.ok)
     if (res.ok) {
       alert("登録成功！ログインしてください");
       router.push("/login");

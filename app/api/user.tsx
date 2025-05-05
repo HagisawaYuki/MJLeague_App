@@ -22,6 +22,17 @@ export const searchUserByID = async (id: string) => {
     return user;
 }
 
+//追加したgame(データベース上で一番したの情報)のidを検索
+export const searchUserIDByName = async (name: string): Promise<string> => {
+    const user = await prisma.user.findUnique({
+        where: {name},
+        select: {
+            id: true,
+        },
+    });
+    return user ? user.id : "";
+}
+
 export const createUser = async (name: string, hashedPassword: string) => {
     await prisma.user.create({
         data: {
