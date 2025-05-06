@@ -23,6 +23,7 @@ export default function Home() {
     const [players, setPlayers] = useState<PlayerWithHanshuangScore[]>();
     const [hanshuangs, setHanshuangs] = useState<HanshuangWithHanshuangScore[]>();
     const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
+    // const [playersID, setPlayersID] = useState<number[]>();
 
     //各プレイヤーの通算を計算する関数
     const calSum = (_hanshuangsTable: HanshuangsTable) => {
@@ -70,18 +71,6 @@ export default function Home() {
     useEffect(() => {
         const homeGameInit = async () => {
             
-            // if(searchParams){
-            //     //   game新規作成ページから来ているか
-            //     const create = searchParams.get('create');
-            //     //   game新規作成ページから来ているなら
-            //     if(create === "true"){
-            //         //直近に追加されたゲーム情報からgameIDを取り出してローカルストレージに保存
-            //         const _gameID = await searchLatestGameID();
-            //         localStorage.setItem("gameID", JSON.stringify(_gameID));
-            //     }
-            // }
-        
-
             //ローカルストレージからgameID取得
             const gameID = Number(localStorage.getItem("gameID"));
             //gameIDからgame情報を取得
@@ -93,11 +82,12 @@ export default function Home() {
                 if(_hanshuangs && _hanshuangs.length > 0){
                     if(_hanshuangs)setHanshuangs(_hanshuangs);
                     //gameIDから4プレイヤーIDを検索
-                    const playersID = _hanshuangs && _hanshuangs[0].scores.map(score => score.playerId);
+                    const _playersID = _hanshuangs && _hanshuangs[0].scores.map(score => score.playerId);
+                    // setPlayersID(_playersID);
                     //4playerIDから4player情報を取得
                     const _players = [];
-                    if(playersID){
-                        for(const playerID of playersID){
+                    if(_playersID){
+                        for(const playerID of _playersID){
                             const _player = await searchPlayerByID(playerID);
                             if(_player){
                                 _players.push(_player)
@@ -110,7 +100,7 @@ export default function Home() {
                     //各プレイヤーの通算を計算する
                     calSum(_hanshuangsTable);
                     //4プレイヤーのidをローカルストレージに保存
-                    localStorage.setItem("players", JSON.stringify(playersID));
+                    localStorage.setItem("players", JSON.stringify(_playersID));
                 }     
             }
         }

@@ -19,7 +19,6 @@ export async function GET(request: NextRequest) {
 }
 
 //Game作成
-// export const createGame = async (formData: FormData) => {
 export async function POST(req: NextRequest) {
   const { userId, isPlayers, date } = await req.json();
   //4人選択されていたら"1"、されていなかったら"0"
@@ -29,7 +28,6 @@ export async function POST(req: NextRequest) {
       return;
   }
   //gameを作成
-  console.log("date", date)
   //日付が入力されていたらgame情報を新規作成
   if(date && userId){
     await prisma.game.create({

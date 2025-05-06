@@ -35,8 +35,6 @@ export const createGame = async (formData: FormData) => {
   const userId = formData.get("userId") as string;
   const isPlayers = formData.get('isPlayers') as string;
   const date = formData.get('date') as string;
-  console.log("date", date)
-  console.log("userID", userId)
   await fetch('/api/game', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

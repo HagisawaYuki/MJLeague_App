@@ -26,8 +26,6 @@ export default function Header() {
       ) : session ? (
         // ✅ ログイン後のヘッダー
         <Flex align="center" gap={4}>
-          {/* <Text>ユーザ：{session.user?.name}</Text>
-          <Button onClick={() => signOut()}>ログアウト</Button> */}
           <Menu.Root>
             <Menu.Trigger asChild>
               <Button variant="outline" size="sm">

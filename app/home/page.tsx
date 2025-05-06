@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { searchUserIDByName } from "../api/user";
 import { PlayerWithHanshuangScore, searchAllPlayersByUserID } from "../api/player";
 import { useRouter } from "next/navigation";
-
 import { GameWithHanshuangsAndScores, searchGamesByUserID } from "../api/game";
 
 type GamesTable = {
@@ -23,7 +22,6 @@ export default function Home() {
   
   const { data: session, status } = useSession();
   const router = useRouter();
-
   const [gamesTable, setGamesTable] = useState<GamesTable>();
   const [t_gamesTable, setT_GamesTable] = useState<{game: GameWithHanshuangsAndScores, score: number, chip: number}[][]>();
   const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
@@ -79,9 +77,7 @@ export default function Home() {
         const _userID = await searchUserIDByName(session.user.name);
         //全player・gameを取得して保存
         const _players: PlayerWithHanshuangScore[] = await searchAllPlayersByUserID(_userID);
-        // console.log("player1", _players[0].name)
         const _Games: GameWithHanshuangsAndScores[] = await searchGamesByUserID(_userID);
-        console.log("game1", _Games[0].id)
         //gamesTableを作成して保存
         const _gamesTable = createGameTable(_Games, _players);
         setGamesTable(_gamesTable);
@@ -94,10 +90,11 @@ export default function Home() {
         setT_GamesTable(transposed);
         //各プレイヤーの通算を計算する
         calSum(_gamesTable);
-      }else{
-        //session情報がなければログイン画面へ
-        router.push("/login");
       }
+      // else{
+        //session情報がなければログイン画面へ
+        // router.push("/login");
+      // }
     }
     initHome();
     
@@ -145,7 +142,6 @@ export default function Home() {
                     <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}</Text>
                     <Text color={score.score + score.chip*100 < 0 ? "red" : score.score + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.score + score.chip*100}</Text>
                   </Box>
-                  
                 </Table.Cell>
               ))}
             </Table.Row>
