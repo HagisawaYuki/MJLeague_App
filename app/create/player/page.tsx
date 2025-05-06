@@ -22,7 +22,6 @@ export default function Create() {
         const initUserID = async () => {
             if(session && session.user && session.user.name){
                 const _userID = await searchUserIDByName(session.user.name);
-                console.log("_userID", _userID)
                 setUserID(_userID)
             }
         }

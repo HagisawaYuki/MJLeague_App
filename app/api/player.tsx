@@ -31,7 +31,6 @@ export const createPlayer = async (formData: FormData) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, userId }),
     });
-    
 }
 
 

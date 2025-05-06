@@ -69,18 +69,19 @@ export default function Home() {
 
     useEffect(() => {
         const homeGameInit = async () => {
-            // const _userID = Number(localStorage.getItem("userID"));
-            // if(_userID === 0){
-            //     router.push("/")
+            
+            // if(searchParams){
+            //     //   game新規作成ページから来ているか
+            //     const create = searchParams.get('create');
+            //     //   game新規作成ページから来ているなら
+            //     if(create === "true"){
+            //         //直近に追加されたゲーム情報からgameIDを取り出してローカルストレージに保存
+            //         const _gameID = await searchLatestGameID();
+            //         localStorage.setItem("gameID", JSON.stringify(_gameID));
+            //     }
             // }
-          //game新規作成ページから来ているか
-        //   const create = searchParams.get('create');
-          //game新規作成ページから来ているなら
-        //   if(create === "true"){
-        //     //直近に追加されたゲーム情報からgameIDを取り出してローカルストレージに保存
-        //     const _gameID = await searchLatestGameID();
-        //     localStorage.setItem("gameID", JSON.stringify(_gameID));
-        //   }
+        
+
             //ローカルストレージからgameID取得
             const gameID = Number(localStorage.getItem("gameID"));
             //gameIDからgame情報を取得
