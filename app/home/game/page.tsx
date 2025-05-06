@@ -17,13 +17,11 @@ type HanshuangsTable = {
 }[];
 
 export default function Home() {
-    // const searchParams = useSearchParams();
     const router = useRouter();
     const [game, setGame] = useState<GameWithHanshuangsAndScores>();
     const [players, setPlayers] = useState<PlayerWithHanshuangScore[]>();
     const [hanshuangs, setHanshuangs] = useState<HanshuangWithHanshuangScore[]>();
     const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
-    // const [playersID, setPlayersID] = useState<number[]>();
 
     //各プレイヤーの通算を計算する関数
     const calSum = (_hanshuangsTable: HanshuangsTable) => {

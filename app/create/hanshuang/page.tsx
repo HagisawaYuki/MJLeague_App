@@ -1,5 +1,5 @@
 "use client"
-import { Box, Button, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Input, NumberInput, Table, Tabs, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
@@ -11,6 +11,9 @@ export default function Create() {
     const router = useRouter();
     const [players, setPlayers] = useState<PlayerWithHanshuangScore[]>();
     const [game, setGame] = useState<GameWithHanshuangsAndScores>();
+    const [scores, setScores] = useState<string[]>(["0","0","0","0"]);
+    const [chips, setChips] = useState<string[]>(["0","0","0","0"]);
+    const [points, setPoints] = useState<number[]>([0,0,0,0]);
 
     type formData = {
         player1: number,
@@ -25,21 +28,22 @@ export default function Create() {
         player4: number,
         score4: number, 
         chip4: number,
-        hanshuangID: number,
         gameID: number
+    }
+
+    const registerName = {
+        scores: ["score1", "score2", "score3", "score4"] as const,
+        chips: ["chip1", "chip2", "chip3", "chip4"] as const 
     }
 
     const {
         register,
+        setValue
         // formState: { errors },
     } = useForm<formData>();
 
     useEffect(() => {
         const createHanshuangInit = async () => {
-            // const _userID = Number(localStorage.getItem("userID"));
-            // if(_userID === 0){
-            //     router.push("/")
-            // }
             //localStorageから試合するプレイヤーのidを取り出す
             const local_players =  localStorage.getItem("players");
             //player情報をplayerIDから取得し、保存
@@ -63,117 +67,219 @@ export default function Create() {
         }
         createHanshuangInit();
     }, [router]);
+
+    //ウマオカ、レートを計算
+    useEffect(() => {
+        //五捨六入する関数
+        const roundToFiveSix = (value: number): number => {
+            const integer = Math.floor(value);
+            const decimal = value - integer;
+          
+            const tenth = Math.floor(decimal * 10);
+          
+            if (tenth <= 5) {
+              return Math.floor(value);
+            } else {
+              return Math.ceil(value);
+            }
+          }
+        const uma = [20000, 10000, -10000, -20000];
+        const oka = [20000, 0, 0, 0];
+        const rate = 50;
+        const indexed = scores.map((score, idx) => ({
+            value: Number(score),
+            index: idx,
+        }));
+          
+        // 降順でソート
+        indexed.sort((a, b) => b.value - a.value);
+        // 数値の降順配列
+        const sortedScores = indexed.map(item => item.value);
+        // 元のインデックス順を表す配列
+        const sortedIndices = indexed.map(item => item.index);
+
+        const afterUmaOkaScores = sortedScores.map((score, i) => roundToFiveSix((score + uma[i] + oka[i] - 30000) / 1000) * rate);
+
+        const originalOrderScores: number[] = [];
+
+        sortedIndices.forEach((originalIndex, sortedIndex) => {
+            originalOrderScores[originalIndex] = afterUmaOkaScores[sortedIndex];
+        });
+        setPoints(originalOrderScores);
+        registerName.scores.forEach((regname, idx) => setValue(regname, originalOrderScores[idx]));
+        registerName.chips.forEach((regname, idx) => setValue(regname, Number(chips[idx])));
+        setValue("score1", originalOrderScores[0]);
+        setValue("score2", originalOrderScores[1]);
+        setValue("score3", originalOrderScores[2]);
+        setValue("score4", originalOrderScores[3]);
+        setValue("chip1", Number(chips[0]));
+        setValue("chip2", Number(chips[1]));
+        setValue("chip3", Number(chips[2]));
+        setValue("chip4", Number(chips[3]));
+    }, [scores, chips, setValue]);
     
     return(
-        <Box>
-            <Box>
-                <Text fontSize="3xl">半荘情報を入力</Text>
+        <Box display="flex" justifyContent="center">
+            <Box width="70%" bg="#EEE" marginTop="5%" padding="5%">
+                <Box>
+                    <Text fontSize="3xl">半荘情報を入力</Text>
+                </Box>
+                <Tabs.Root defaultValue="score">
+                    <Tabs.List>
+                        <Tabs.Trigger value="score">
+                            精算後から
+                        </Tabs.Trigger>
+                        <Tabs.Trigger value="point">
+                            点数から
+                        </Tabs.Trigger>
+                    </Tabs.List>
+                    <Tabs.Content value="score">
+                        {players && 
+                            <form action={createHanshuangScores}>
+                                <Input type="hidden" {...register('player1')} value={players[0].id}></Input>
+                                <Input type="hidden" {...register('player2')} value={players[1].id}></Input>
+                                <Input type="hidden" {...register('player3')} value={players[2].id}></Input>
+                                <Input type="hidden" {...register('player4')} value={players[3].id}></Input>
+                                {game && <Input type="hidden" {...register('gameID')} value={game.id}></Input>}
+                                <Table.Root size="sm">
+                                    <Table.Header>
+                                        <Table.Row>
+                                        <Table.ColumnHeader></Table.ColumnHeader>
+                                            {players && players.map((player) => (
+                                                <Table.ColumnHeader key={player.id}>{player.name}</Table.ColumnHeader>
+                                            ))}
+                                        </Table.Row>
+                                    </Table.Header>
+                                    <Table.Body>
+                                    <Table.Row>
+                                    <Table.Cell>
+                                        <Text>スコア</Text>
+                                    </Table.Cell>
+                                    {registerName.scores.map((regname, idx) => (
+                                        <Table.Cell key={idx}>
+                                            <Input 
+                                                type="number" 
+                                                placeholder=""
+                                                bg="white"
+                                                {...register(regname)}
+                                            ></Input>
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>
+                                        <Text>チップ</Text>
+                                    </Table.Cell>
+                                    {registerName.chips.map((regname, idx) => (
+                                        <Table.Cell key={idx}>
+                                            <Input 
+                                                type="number" 
+                                                placeholder=""
+                                                bg="white"
+                                                {...register(regname)}
+                                            ></Input>
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                                    </Table.Body>
+                                </Table.Root>
+                                <Box>
+                                    <Button type="submit" colorPalette="orange" variant="subtle">
+                                        完了
+                                    </Button>
+                                </Box>
+                            </form>
+                        }
+                    </Tabs.Content>
+                    <Tabs.Content value="point">
+                        <Table.Root size="sm">
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.ColumnHeader></Table.ColumnHeader>
+                                    {players && players.map((player) => (
+                                        <Table.ColumnHeader key={player.id}>{player.name}</Table.ColumnHeader>
+                                    ))}
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                <Table.Row>
+                                    <Table.Cell>
+                                        <Text>スコア</Text>
+                                    </Table.Cell>
+                                    {scores.map((score, i) => (
+                                        <Table.Cell key={i}>
+                                            <NumberInput.Root
+                                                value={score}
+                                                onValueChange={(e) => {
+                                                    const newScores = scores.map((score, j) => i === j ? e.value : score);
+                                                    setScores(newScores);
+                                                }}
+                                            >
+                                            <NumberInput.Control />
+                                            <NumberInput.Input />
+                                            </NumberInput.Root>
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>
+                                        <Text>チップ</Text>
+                                    </Table.Cell>
+                                    {chips.map((chip, i) => (
+                                        <Table.Cell key={i}>
+                                            <NumberInput.Root
+                                                value={chip}
+                                                onValueChange={(e) => {
+                                                    const newChips = chips.map((chip, j) => i === j ? e.value : chip);
+                                                    setChips(newChips);
+                                                }}
+                                            >
+                                            <NumberInput.Control />
+                                            <NumberInput.Input />
+                                            </NumberInput.Root>
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>
+                                        <Text>ポイント</Text>
+                                    </Table.Cell>
+                                    {points.map((point, i) => (
+                                        <Table.Cell key={i}>
+                                            <Text>{point}</Text>
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                                
+                            </Table.Body>
+                        </Table.Root>
+                        {players && 
+                            <form action={createHanshuangScores}>
+                                <Input type="hidden" {...register('player1')} value={players[0].id}></Input>
+                                <Input type="hidden" {...register('player2')} value={players[1].id}></Input>
+                                <Input type="hidden" {...register('player3')} value={players[2].id}></Input>
+                                <Input type="hidden" {...register('player4')} value={players[3].id}></Input>
+                                <Input type="hidden" {...register('score1')} value={points[0]}></Input>
+                                <Input type="hidden" {...register('score2')} value={points[1]}></Input>
+                                <Input type="hidden" {...register('score3')} value={points[2]}></Input>
+                                <Input type="hidden" {...register('score4')} value={points[3]}></Input>
+                                <Input type="hidden" {...register('chip1')} value={Number(chips[0])}></Input>
+                                <Input type="hidden" {...register('chip2')} value={Number(chips[1])}></Input>
+                                <Input type="hidden" {...register('chip3')} value={Number(chips[2])}></Input>
+                                <Input type="hidden" {...register('chip4')} value={Number(chips[3])}></Input>
+                                {game && <Input type="hidden" {...register('gameID')} value={game.id}></Input>}
+                                <Box>
+                                    <Button type="submit" colorPalette="orange" variant="subtle">
+                                        完了
+                                    </Button>
+                                </Box>
+                            </form>
+                        }
+                    </Tabs.Content>
+                </Tabs.Root>
+                
+                
             </Box>
-            <Box display="flex">
-                <Box>
-                    <Text>プレイヤー名</Text>
-                </Box>
-                <Box>
-                    <Text>スコア</Text>
-                </Box>
-                <Box>
-                    <Text>チップ数</Text>
-                </Box>
-            </Box>
-            {players && 
-            /** form入力後半荘スコアモデルを作成する。 */
-                <form action={createHanshuangScores}>
-                    {/* <Box hidden> */}
-                        <Input type="hidden" {...register('player1')} value={players[0].id}></Input>
-                        <Input type="hidden" {...register('player2')} value={players[1].id}></Input>
-                        <Input type="hidden" {...register('player3')} value={players[2].id}></Input>
-                        <Input type="hidden" {...register('player4')} value={players[3].id}></Input>
-                        {game && <Input type="hidden" {...register('gameID')} value={game.id}></Input>}
-                    {/* </Box> */}
-                    <Box display="flex">
-                        <Box>
-                            <Text>{players[0].name}</Text>
-                        </Box>
-                        <Box>
-                            <Input 
-                              type="number" 
-                              placeholder=""
-                              {...register('score1')}
-                            ></Input>
-                        </Box>
-                        <Box>
-                            <Input 
-                              type="number" 
-                              placeholder=""
-                              {...register('chip1')}
-                            ></Input>
-                        </Box>
-                    </Box>
-                    <Box display="flex">
-                        <Box>
-                            <Text>{players[1].name}</Text>
-                        </Box>
-                        <Box>
-                            <Input 
-                              type="number" 
-                              placeholder=""
-                              {...register('score2')}
-                            ></Input>
-                        </Box>
-                        <Box>
-                            <Input 
-                              type="number" 
-                              placeholder=""
-                              {...register('chip2')}
-                            ></Input>
-                        </Box>
-                    </Box>
-                    <Box display="flex">
-                        <Box>
-                            <Text>{players[2].name}</Text>
-                        </Box>
-                        <Box>
-                            <Input 
-                              type="number" 
-                              placeholder=""
-                              {...register('score3')}
-                            ></Input>
-                        </Box>
-                        <Box>
-                            <Input 
-                              type="number" 
-                              placeholder=""
-                              {...register('chip3')}
-                            ></Input>
-                        </Box>
-                    </Box>
-                    <Box display="flex">
-                        <Box>
-                            <Text>{players[3].name}</Text>
-                        </Box>
-                        <Box>
-                            <Input 
-                              type="number" 
-                              placeholder=""
-                              {...register('score4')}
-                            ></Input>
-                        </Box>
-                        <Box>
-                            <Input 
-                              type="number" 
-                              placeholder=""
-                              {...register('chip4')}
-                            ></Input>
-                        </Box>
-                    </Box>
-                    <Box>
-                        <Button type="submit" colorPalette="orange" variant="subtle">
-                            完了
-                        </Button>
-                    </Box>
-                </form>
-            }
-            
         </Box>
     )
 }

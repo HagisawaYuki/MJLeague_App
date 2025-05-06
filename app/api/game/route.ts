@@ -37,8 +37,4 @@ export async function POST(req: NextRequest) {
         }
     })
   }
-
-  //新規作成だからqueryでcreate=trueをつけて/home/gameへ飛ぶ
-  // redirect(`/home/game?create=${true}`);
-  
 }
