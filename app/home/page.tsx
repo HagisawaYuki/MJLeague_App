@@ -79,7 +79,9 @@ export default function Home() {
         const _userID = await searchUserIDByName(session.user.name);
         //全player・gameを取得して保存
         const _players: PlayerWithHanshuangScore[] = await searchAllPlayersByUserID(_userID);
+        // console.log("player1", _players[0].name)
         const _Games: GameWithHanshuangsAndScores[] = await searchGamesByUserID(_userID);
+        console.log("game1", _Games[0].id)
         //gamesTableを作成して保存
         const _gamesTable = createGameTable(_Games, _players);
         setGamesTable(_gamesTable);

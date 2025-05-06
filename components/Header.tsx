@@ -1,11 +1,16 @@
 'use client';
 
 import { useSession, signOut } from 'next-auth/react';
-import { Button, Flex, Text } from '@chakra-ui/react';
-import Link from 'next/link';
+import { Button, Flex, Menu, Portal, Text, Link } from '@chakra-ui/react';
+
 
 export default function Header() {
   const { data: session, status } = useSession();
+
+  const menus = [
+    {text: "プレイヤー追加", href: "/create/player"},
+    {text: "ゲーム作成", href: "/create/game"},
+  ]
 
   return (
     <Flex justify="space-between" align="center" p={4} bg="gray.100">
@@ -21,8 +26,33 @@ export default function Header() {
       ) : session ? (
         // ✅ ログイン後のヘッダー
         <Flex align="center" gap={4}>
-          <Text>ユーザ：{session.user?.name}</Text>
-          <Button onClick={() => signOut()}>ログアウト</Button>
+          {/* <Text>ユーザ：{session.user?.name}</Text>
+          <Button onClick={() => signOut()}>ログアウト</Button> */}
+          <Menu.Root>
+            <Menu.Trigger asChild>
+              <Button variant="outline" size="sm">
+                メニュー
+              </Button>
+            </Menu.Trigger>
+            <Portal>
+              <Menu.Positioner>
+                <Menu.Content>
+                  {menus.map((menu, idx) => {
+                    return(
+                      <Menu.Item key={idx} value={menu.href} bg="white">
+                        <Link href={menu.href}>
+                          {menu.text}
+                        </Link>
+                      </Menu.Item>
+                    )
+                  })}
+                  <Menu.Item value="signout">
+                    <Button variant="outline" onClick={() => signOut()}>ログアウト</Button>
+                  </Menu.Item>
+                </Menu.Content>
+              </Menu.Positioner>
+            </Portal>
+          </Menu.Root>
         </Flex>
       ) : (
         // ✅ ログイン前のヘッダー

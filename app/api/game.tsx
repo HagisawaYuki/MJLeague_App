@@ -14,22 +14,14 @@ export type GameWithHanshuangsAndScores = Prisma.GameGetPayload<{
 
 //userIDから全ゲーム情報を取得する関数
 export const searchGamesByUserID = async (userID: string): Promise<GameWithHanshuangsAndScores[]> => {
-    const res = await fetch('/api/games', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userID }),
-    });
+    const res = await fetch(`/api/games?userId=${userID}`);
     const data: GameWithHanshuangsAndScores[] = await res.json();
     return data;
 };
 
 //IDからゲーム情報を取得する関数
 export const searchGameByID = async (id: number): Promise<GameWithHanshuangsAndScores> => {
-    const res = await fetch('/api/game', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
+    const res = await fetch(`/api/game?id=${id}`);
     const data: GameWithHanshuangsAndScores = await res.json();
     return data;
 };
