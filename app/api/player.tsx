@@ -28,13 +28,3 @@ export const searchPlayerByID = async (id: number): Promise<PlayerWithHanshuangS
 }
 
 
-
-// export const searchAllPlayersByUserID = async (userId: string): Promise<PlayerWithHanshuangScore[]> => {
-//     const players = await prisma.player.findMany({
-//         where: {userId},
-//         include: {
-//             scores: true,
-//         },
-//     });
-//     return players;
-// }

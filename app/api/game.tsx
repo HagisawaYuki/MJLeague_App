@@ -23,19 +23,15 @@ export const searchGamesByUserID = async (userID: string): Promise<GameWithHansh
     return data;
 };
 
+//IDからゲーム情報を取得する関数
+export const searchGameByID = async (id: number): Promise<GameWithHanshuangsAndScores> => {
+    const res = await fetch('/api/game', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    const data: GameWithHanshuangsAndScores = await res.json();
+    return data;
+};
 
 
-//game情報を全検索
-// export const searchGames = async (userId: string): Promise<GameWithHanshuangsAndScores[]> => {
-//     const games = await prisma.game.findMany({
-//         where: { userId },
-//         include: {
-//             hanshuangs: {
-//               include: {
-//                 scores: true, // ← ここが重要
-//               },
-//             },
-//           },
-//     });
-//     return games;
-// }

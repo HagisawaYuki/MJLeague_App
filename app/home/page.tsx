@@ -24,7 +24,6 @@ export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // const [players, setPlayers] = useState<Player[]>();
   const [gamesTable, setGamesTable] = useState<GamesTable>();
   const [t_gamesTable, setT_GamesTable] = useState<{game: GameWithHanshuangsAndScores, score: number, chip: number}[][]>();
   const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
@@ -110,62 +109,62 @@ export default function Home() {
   return (
     <Box>
       <Table.Root size="sm" striped showColumnBorder>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader textAlign="center">
-          </Table.ColumnHeader>
-          {gamesTable?.map((player, idx) => (
-            <Table.ColumnHeader key={idx} textAlign="center">
-              <Button bg="white" onClick={() => {
-                localStorage.setItem("editPlayerID", JSON.stringify(player.playerID));
-                localStorage.setItem("editPlayerName", JSON.stringify(player.name));
-                router.push("/home/player")
-              }}>
-                <Text color="black" as="b">{player.name}</Text>
-              </Button>
-              
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader textAlign="center">
             </Table.ColumnHeader>
-          ))}
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {t_gamesTable?.map((row, rowIndex) => (
-          <Table.Row key={rowIndex} onClick={() => {
-            localStorage.setItem("gameID", JSON.stringify(row[0].game.id));//仮でgameID:2を保存
-            router.push("/home/game")
-          }}>
-            <Table.Cell textAlign="center">
-              <Text as="b">{row[0].game.date}</Text>
-            </Table.Cell>
-            {row.map((score, colIndex) => (
-              <Table.Cell key={colIndex} textAlign="center">
-                <Box textAlign="center">
-                  <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"}>{score.score}</Text>
-                  <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}</Text>
-                  <Text color={score.score + score.chip*100 < 0 ? "red" : score.score + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.score + score.chip*100}</Text>
-                </Box>
+            {gamesTable?.map((player, idx) => (
+              <Table.ColumnHeader key={idx} textAlign="center">
+                <Button bg="white" onClick={() => {
+                  localStorage.setItem("editPlayerID", JSON.stringify(player.playerID));
+                  localStorage.setItem("editPlayerName", JSON.stringify(player.name));
+                  router.push("/home/player")
+                }}>
+                  <Text color="black" as="b">{player.name}</Text>
+                </Button>
                 
-              </Table.Cell>
+              </Table.ColumnHeader>
             ))}
           </Table.Row>
-        ))}
-        <Table.Row>
-          <Table.Cell textAlign="center">
-            <Text as="b">合計値</Text>
-          </Table.Cell>
-            {sumScores && sumScores.map((score, colIndex) => (
-              <Table.Cell key={colIndex} textAlign="center">
-                <Box textAlign="center">
-                  <Text color={score.sumScore < 0 ? "red" : score.sumScore === 0 ? "black" : "blue"}>{score.sumScore}</Text>
-                  <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}</Text>
-                  <Text color={score.sumScore + score.chip*100 < 0 ? "red" : score.sumScore + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.sumScore + score.chip*100}</Text>
-                </Box>
+        </Table.Header>
+        <Table.Body>
+          {t_gamesTable?.map((row, rowIndex) => (
+            <Table.Row key={rowIndex} onClick={() => {
+              localStorage.setItem("gameID", JSON.stringify(row[0].game.id));//仮でgameID:2を保存
+              router.push("/home/game")
+            }}>
+              <Table.Cell textAlign="center">
+                <Text as="b">{row[0].game.date}</Text>
               </Table.Cell>
-            ))}
-          
-        </Table.Row>
-      </Table.Body>
-    </Table.Root>
+              {row.map((score, colIndex) => (
+                <Table.Cell key={colIndex} textAlign="center">
+                  <Box textAlign="center">
+                    <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"}>{score.score}</Text>
+                    <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}</Text>
+                    <Text color={score.score + score.chip*100 < 0 ? "red" : score.score + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.score + score.chip*100}</Text>
+                  </Box>
+                  
+                </Table.Cell>
+              ))}
+            </Table.Row>
+          ))}
+          <Table.Row>
+            <Table.Cell textAlign="center">
+              <Text as="b">合計値</Text>
+            </Table.Cell>
+              {sumScores && sumScores.map((score, colIndex) => (
+                <Table.Cell key={colIndex} textAlign="center">
+                  <Box textAlign="center">
+                    <Text color={score.sumScore < 0 ? "red" : score.sumScore === 0 ? "black" : "blue"}>{score.sumScore}</Text>
+                    <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}</Text>
+                    <Text color={score.sumScore + score.chip*100 < 0 ? "red" : score.sumScore + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.sumScore + score.chip*100}</Text>
+                  </Box>
+                </Table.Cell>
+              ))}
+            
+          </Table.Row>
+        </Table.Body>
+      </Table.Root>
     </Box>
   );
 }

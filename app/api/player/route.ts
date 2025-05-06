@@ -5,7 +5,6 @@ import prisma from "../../../lib/prisma"
 
 
 //１playerを探索
-// export const searchPlayerByID = async (id: number) => {
 export async function POST(req: NextRequest) {
     const { id } = await req.json();
     const player = await prisma.player.findUnique({
