@@ -129,7 +129,7 @@ export default function Home() {
         <Table.Body>
           {t_gamesTable?.map((row, rowIndex) => (
             <Table.Row key={rowIndex} onClick={() => {
-              localStorage.setItem("gameID", JSON.stringify(row[0].game.id));//仮でgameID:2を保存
+              localStorage.setItem("gameID", JSON.stringify(row[0].game.id));
               router.push("/home/game")
             }}>
               <Table.Cell textAlign="center">

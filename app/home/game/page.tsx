@@ -10,7 +10,7 @@ import { PlayerWithHanshuangScore, searchPlayerByID } from "../../api/player";
 type HanshuangsTable = {
     name: string;
     scores: {
-      hanshuang: HanshuangWithHanshuangScore;
+      scoreID: number;
       score: number;
       chip: number;
     }[];
@@ -19,8 +19,8 @@ type HanshuangsTable = {
 export default function Home() {
     const router = useRouter();
     const [game, setGame] = useState<GameWithHanshuangsAndScores>();
-    const [players, setPlayers] = useState<PlayerWithHanshuangScore[]>();
-    const [hanshuangs, setHanshuangs] = useState<HanshuangWithHanshuangScore[]>();
+    const [hanshuangsTable, setHanshuangsTable] = useState<HanshuangsTable>();
+    const [t_hanshuangsTable, setT_HanshuangsTable] = useState<{scoreID: number, score: number, chip: number}[][]>();
     const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
 
     //各プレイヤーの通算を計算する関数
@@ -43,13 +43,13 @@ export default function Home() {
         //playerごとにループ
         return players.map(player => {
             //1playerの全スコアの配列
-            const scores: {hanshuang: HanshuangWithHanshuangScore; score: number, chip: number}[] = [];
+            const scores: {scoreID: number; score: number, chip: number}[] = [];
             //gameごとにループ
             for (const hanshuang of hanshuangs) {
                 // 1つのゲームに含まれるすべての半荘
                 const scoreEntry = hanshuang.scores.find(score => score.playerId === player.id);
                 if (scoreEntry) {
-                scores.push({hanshuang: hanshuang, score: scoreEntry.score, chip: scoreEntry.chip});
+                scores.push({scoreID: scoreEntry.id, score: scoreEntry.score, chip: scoreEntry.chip});
                 }
             }
             return {
@@ -78,10 +78,8 @@ export default function Home() {
             if(_game){
                 const _hanshuangs = _game.hanshuangs.map(hanshuang => hanshuang);
                 if(_hanshuangs && _hanshuangs.length > 0){
-                    if(_hanshuangs)setHanshuangs(_hanshuangs);
                     //gameIDから4プレイヤーIDを検索
                     const _playersID = _hanshuangs && _hanshuangs[0].scores.map(score => score.playerId);
-                    // setPlayersID(_playersID);
                     //4playerIDから4player情報を取得
                     const _players = [];
                     if(_playersID){
@@ -92,9 +90,24 @@ export default function Home() {
                             }
                         }
                     }
-                    setPlayers(_players);
             
                     const _hanshuangsTable = createHanshuangTable(_hanshuangs, _players);
+                    setHanshuangsTable(_hanshuangsTable);
+                    _hanshuangsTable.forEach((player, idx) => {
+                        console.log("index", idx);
+                        console.log("name", player.name);
+                        player.scores.forEach((score) => {
+                            console.log("score", score.score);
+                            console.log("chip", score.chip);
+                        })
+                    })
+                    //scoresの長さを計算（ゲーム数）
+                    const numRows = _hanshuangsTable[0]?.scores.length || 0;
+                    // 縦横反転して保存
+                    const transposed = Array.from({ length: numRows }, (_, rowIndex) =>
+                        _hanshuangsTable.map(player => player.scores[rowIndex] ?? '')
+                    );
+                    setT_HanshuangsTable(transposed);
                     //各プレイヤーの通算を計算する
                     calSum(_hanshuangsTable);
                     //4プレイヤーのidをローカルストレージに保存
@@ -132,7 +145,7 @@ export default function Home() {
                         <Table.Row>
                             <Table.ColumnHeader textAlign="center">
                             </Table.ColumnHeader>
-                            {players?.map((player, idx) => (
+                            {hanshuangsTable?.map((player, idx) => (
                                 <Table.ColumnHeader key={idx} textAlign="center">
                                     <Text as="b">{player.name}</Text>
                                 </Table.ColumnHeader>
@@ -140,13 +153,13 @@ export default function Home() {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {hanshuangs?.map((row, rowIndex) => (
+                        {t_hanshuangsTable?.map((row, rowIndex) => (
                             <Table.Row key={rowIndex}>
                                 <Table.Cell textAlign="center">
                                     <Text as="b">{rowIndex + 1}</Text>
                                 </Table.Cell>
-                                {row.scores.map((score, colIndex) => (
-                                    <Table.Cell key={colIndex} textAlign="center" onClick={() => {onSubmit(score.id, score.score, score.chip)}}>
+                                {row.map((score, colIndex) => (
+                                    <Table.Cell key={colIndex} textAlign="center" onClick={() => {onSubmit(score.scoreID, score.score, score.chip)}}>
                                         <Box textAlign="center">
                                         <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"}>{score.score}</Text>
                                         <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}</Text>
@@ -154,7 +167,7 @@ export default function Home() {
                                         </Box>
                                     </Table.Cell>
                                 ))}
-                                </Table.Row>
+                            </Table.Row>
                         ))}
                         <Table.Row>
                             <Table.Cell textAlign="center">
