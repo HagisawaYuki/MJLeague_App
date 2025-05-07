@@ -2,11 +2,12 @@
 
 import { useSession, signOut } from 'next-auth/react';
 import { Button, Flex, Menu, Portal, Text, Link } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
 
 export default function Header() {
   const { data: session, status } = useSession();
-
+  const router = useRouter();
   const menus = [
     {text: "プレイヤー追加", href: "/create/player"},
     {text: "ゲーム作成", href: "/create/game"},
@@ -45,7 +46,11 @@ export default function Header() {
                     )
                   })}
                   <Menu.Item value="signout">
-                    <Button variant="outline" onClick={() => signOut()}>ログアウト</Button>
+                    <Button variant="outline" onClick={() => {
+                      router.push("/");
+                      signOut();
+                      
+                    }}>ログアウト</Button>
                   </Menu.Item>
                 </Menu.Content>
               </Menu.Positioner>
