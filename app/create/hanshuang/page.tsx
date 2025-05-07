@@ -6,6 +6,28 @@ import { useEffect, useState } from "react";
 import { PlayerWithHanshuangScore, searchPlayerByID } from "../../api/player";
 import { GameWithHanshuangsAndScores, searchGameByID } from "../../api/game";
 import { createHanshuangScores } from "../../api/hanshuang_score";
+
+type formData = {
+    player1: number,
+    score1: number, 
+    chip1: number, 
+    player2: number,
+    score2: number, 
+    chip2: number, 
+    player3: number,
+    score3: number, 
+    chip3: number, 
+    player4: number,
+    score4: number, 
+    chip4: number,
+    gameID: number
+}
+
+const registerName = {
+    scores: ["score1", "score2", "score3", "score4"] as const,
+    chips: ["chip1", "chip2", "chip3", "chip4"] as const,
+    players: ["player1", "player2", "player3", "player4"] as const
+}
 export default function Create() {
 
     const router = useRouter();
@@ -14,27 +36,6 @@ export default function Create() {
     const [scores, setScores] = useState<string[]>(["0","0","0","0"]);
     const [chips, setChips] = useState<string[]>(["0","0","0","0"]);
     const [points, setPoints] = useState<number[]>([0,0,0,0]);
-
-    type formData = {
-        player1: number,
-        score1: number, 
-        chip1: number, 
-        player2: number,
-        score2: number, 
-        chip2: number, 
-        player3: number,
-        score3: number, 
-        chip3: number, 
-        player4: number,
-        score4: number, 
-        chip4: number,
-        gameID: number
-    }
-
-    const registerName = {
-        scores: ["score1", "score2", "score3", "score4"] as const,
-        chips: ["chip1", "chip2", "chip3", "chip4"] as const 
-    }
 
     const {
         register,
@@ -82,10 +83,12 @@ export default function Create() {
             } else {
               return Math.ceil(value);
             }
-          }
+        }
+        //ウマオカ、レート定義
         const uma = [20000, 10000, -10000, -20000];
         const oka = [20000, 0, 0, 0];
         const rate = 50;
+        //ここからウマオカ計算
         const indexed = scores.map((score, idx) => ({
             value: Number(score),
             index: idx,
@@ -108,14 +111,7 @@ export default function Create() {
         setPoints(originalOrderScores);
         registerName.scores.forEach((regname, idx) => setValue(regname, originalOrderScores[idx]));
         registerName.chips.forEach((regname, idx) => setValue(regname, Number(chips[idx])));
-        setValue("score1", originalOrderScores[0]);
-        setValue("score2", originalOrderScores[1]);
-        setValue("score3", originalOrderScores[2]);
-        setValue("score4", originalOrderScores[3]);
-        setValue("chip1", Number(chips[0]));
-        setValue("chip2", Number(chips[1]));
-        setValue("chip3", Number(chips[2]));
-        setValue("chip4", Number(chips[3]));
+        
     }, [scores, chips, setValue]);
     
     return(
@@ -136,10 +132,13 @@ export default function Create() {
                     <Tabs.Content value="score">
                         {players && 
                             <form action={createHanshuangScores}>
-                                <Input type="hidden" {...register('player1')} value={players[0].id}></Input>
+                                {registerName.players.map((regname, idx) => (
+                                    <Input type="hidden" key={idx} {...register(regname)} value={players[idx].id}></Input>
+                                ))}
+                                {/* <Input type="hidden" {...register('player1')} value={players[0].id}></Input>
                                 <Input type="hidden" {...register('player2')} value={players[1].id}></Input>
                                 <Input type="hidden" {...register('player3')} value={players[2].id}></Input>
-                                <Input type="hidden" {...register('player4')} value={players[3].id}></Input>
+                                <Input type="hidden" {...register('player4')} value={players[3].id}></Input> */}
                                 {game && <Input type="hidden" {...register('gameID')} value={game.id}></Input>}
                                 <Table.Root size="sm">
                                     <Table.Header>
@@ -255,7 +254,16 @@ export default function Create() {
                         </Table.Root>
                         {players && 
                             <form action={createHanshuangScores}>
-                                <Input type="hidden" {...register('player1')} value={players[0].id}></Input>
+                                {registerName.players.map((regname, idx) => (
+                                    <Input type="hidden" key={idx} {...register(regname)} value={players[idx].id}></Input>
+                                ))}
+                                {registerName.scores.map((regname, idx) => (
+                                    <Input type="hidden" key={idx} {...register(regname)} value={points[idx]}></Input>
+                                ))}
+                                {registerName.chips.map((regname, idx) => (
+                                    <Input type="hidden" key={idx} {...register(regname)} value={Number(chips[idx])}></Input>
+                                ))}
+                                {/* <Input type="hidden" {...register('player1')} value={players[0].id}></Input>
                                 <Input type="hidden" {...register('player2')} value={players[1].id}></Input>
                                 <Input type="hidden" {...register('player3')} value={players[2].id}></Input>
                                 <Input type="hidden" {...register('player4')} value={players[3].id}></Input>
@@ -266,7 +274,7 @@ export default function Create() {
                                 <Input type="hidden" {...register('chip1')} value={Number(chips[0])}></Input>
                                 <Input type="hidden" {...register('chip2')} value={Number(chips[1])}></Input>
                                 <Input type="hidden" {...register('chip3')} value={Number(chips[2])}></Input>
-                                <Input type="hidden" {...register('chip4')} value={Number(chips[3])}></Input>
+                                <Input type="hidden" {...register('chip4')} value={Number(chips[3])}></Input> */}
                                 {game && <Input type="hidden" {...register('gameID')} value={game.id}></Input>}
                                 <Box>
                                     <Button type="submit" colorPalette="orange" variant="subtle">
@@ -277,8 +285,6 @@ export default function Create() {
                         }
                     </Tabs.Content>
                 </Tabs.Root>
-                
-                
             </Box>
         </Box>
     )

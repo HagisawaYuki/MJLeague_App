@@ -5,7 +5,6 @@ import prisma from "../../../lib/prisma";
 
 //半荘を新規作成
 export async function POST(req: NextRequest) {
-// export const createHanshuang = async (id: number) => {
     const { gameId } = await req.json();
     //追加元のgameIDから半荘情報を新規作成
     const hanshuang = await prisma.hanshuang.create({

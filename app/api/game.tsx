@@ -30,7 +30,6 @@ export const searchGameByID = async (id: number): Promise<GameWithHanshuangsAndS
 
 //userID、nameからプレイヤー情報を新規作成する関数
 export const createGame = async (formData: FormData) => {
-    
   //formDataから入力された名前を取り出す
   const userId = formData.get("userId") as string;
   const isPlayers = formData.get('isPlayers') as string;

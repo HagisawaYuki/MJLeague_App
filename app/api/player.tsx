@@ -1,5 +1,6 @@
 
 import { Prisma } from "@prisma/client"
+import { redirect } from "next/navigation";
 
 //scores情報を含んだPlayerの型
 export type PlayerWithHanshuangScore = Prisma.PlayerGetPayload<{
@@ -31,6 +32,19 @@ export const createPlayer = async (formData: FormData) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, userId }),
     });
+}
+
+
+export const editPlayerName = async (formData: FormData) => {
+    //formDataから入力された名前を取り出す
+    const name = formData.get('name') as string;
+    const id = Number(formData.get("playerID"));
+    await fetch('/api/player', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, name }),
+    });
+    redirect("/home");
 }
 
 

@@ -31,3 +31,22 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(player);
     }
 }
+
+
+//1Playerを編集
+export async function PUT(req: NextRequest) {
+    //reqから入力された名前、userIDを取り出す
+    const { id, name } = await req.json();
+    console.log("id: ", id);
+    console.log("name: ", name);
+    if (!id || !name) {
+        return new Response("Missing id or name", { status: 400 });
+    }
+    const updatedPlayer = await prisma.player.update({
+        where: { id }, // 編集対象のID
+        data: {
+            name: name
+        },
+    });
+    return NextResponse.json(updatedPlayer);
+}
