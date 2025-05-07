@@ -4,7 +4,7 @@ import { Box, Button, Table, Text } from "@chakra-ui/react";
 import { HanshuangWithHanshuangScore } from "../../api/hanshuang";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { GameWithHanshuangsAndScores, searchGameByID } from "../../api/game";
+import { searchGameByID } from "../../api/game";
 import { PlayerWithHanshuangScore, searchPlayerByID } from "../../api/player";
 
 type HanshuangsTable = {
@@ -18,7 +18,7 @@ type HanshuangsTable = {
 
 export default function Home() {
     const router = useRouter();
-    const [game, setGame] = useState<GameWithHanshuangsAndScores>();
+    // const [game, setGame] = useState<GameWithHanshuangsAndScores>();
     const [hanshuangsTable, setHanshuangsTable] = useState<HanshuangsTable>();
     const [t_hanshuangsTable, setT_HanshuangsTable] = useState<{scoreID: number, score: number, chip: number}[][]>();
     const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
@@ -73,7 +73,7 @@ export default function Home() {
             const gameID = Number(localStorage.getItem("gameID"));
             //gameIDからgame情報を取得
             const _game = await searchGameByID(gameID);
-            if(_game)setGame(_game);
+            // if(_game)setGame(_game);
             //gameから半荘データを取得
             if(_game){
                 const _hanshuangs = _game.hanshuangs.map(hanshuang => hanshuang);
@@ -129,7 +129,7 @@ export default function Home() {
                 >
                     半荘を追加
                 </Button>
-                <Button
+                {/* <Button
                     colorPalette="orange" variant="subtle"
                     onClick={() => {
                     localStorage.setItem("gameID", JSON.stringify(game?.id));
@@ -137,7 +137,7 @@ export default function Home() {
                     }}
                 >
                     プレイヤーを変更
-                </Button>
+                </Button> */}
             </Box>
             <Box>
                 <Table.Root size="sm" striped showColumnBorder>
