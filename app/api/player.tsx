@@ -34,7 +34,7 @@ export const createPlayer = async (formData: FormData) => {
     });
 }
 
-
+//player名を変更する関数
 export const editPlayerName = async (formData: FormData) => {
     //formDataから入力された名前を取り出す
     const name = formData.get('name') as string;

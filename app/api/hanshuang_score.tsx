@@ -1,6 +1,14 @@
 import { redirect } from "next/navigation";
 import { createHanshuang } from "./hanshuang";
+import { HanshuangScore } from "@prisma/client";
 
+
+//IDから半荘スコア情報を取得する関数
+export const searchHanshuangScoreByID = async (id: number): Promise<HanshuangScore> => {
+    const res = await fetch(`/api/hanshuang_score?id=${id}`);
+    const data: HanshuangScore = await res.json();
+    return data;
+};
 
 //userID、nameからプレイヤー情報を新規作成する関数
 export const createHanshuangScores = async (formData: FormData) => {
@@ -39,4 +47,27 @@ export const createHanshuangScores = async (formData: FormData) => {
     }
     // /home/gameへ飛ぶ
     redirect("/home/game")
+}
+
+
+//半荘スコア情報の点数とチップを変更する関数
+export const editHanshuangScore = async (formData: FormData) => {
+    //formDataから入力された名前を取り出す
+    const id = Number(formData.get('scoreID'));
+    const score = Number(formData.get("score"));
+    const chip = Number(formData.get('chip'));
+    console.log("scoreID: ", id);
+    console.log("score: ", score)
+    console.log("chip: ", chip)
+    const _hanshuangScore = await searchHanshuangScoreByID(id);
+    const playerId = _hanshuangScore.playerId;
+    const hanshuangId = _hanshuangScore.hanshuangId;
+    console.log("playerId: ", playerId)
+    console.log("hanshuangId: ", hanshuangId)
+    await fetch('/api/hanshuang_score', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, score, chip, playerId, hanshuangId }),
+    });
+    redirect("/home/game");
 }
