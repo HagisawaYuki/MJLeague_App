@@ -7,6 +7,7 @@ import { searchUserIDByName } from "../api/user";
 import { PlayerWithHanshuangScore, searchAllPlayersByUserID } from "../api/player";
 import { useRouter } from "next/navigation";
 import { GameWithHanshuangsAndScores, searchGamesByUserID } from "../api/game";
+import { RiArrowRightLine } from "react-icons/ri";
 
 type GamesTable = {
   playerID: number;
@@ -119,7 +120,7 @@ export default function Home() {
                   localStorage.setItem("editPlayerName", JSON.stringify(player.name));
                   router.push("/home/player")
                 }}>
-                  <Text color="black" as="b">{player.name}</Text>
+                  <Text display="flex" color="black" as="b" >{player.name}<RiArrowRightLine /></Text>
                 </Button>
                 
               </Table.ColumnHeader>

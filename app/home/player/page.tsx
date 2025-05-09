@@ -12,7 +12,7 @@ const dataTableHeader1 = [
   {name: "総合ポイント"},
   {name: "総ポイント数"},
   {name: "総チップ数"},
-  {name: "参加ゲーム数"},
+  {name: "参加半荘数"},
 ];
 
 const dataTableHeader2 = [
