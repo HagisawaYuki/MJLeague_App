@@ -135,10 +135,6 @@ export default function Create() {
                                 {registerName.players.map((regname, idx) => (
                                     <Input type="hidden" key={idx} {...register(regname)} value={players[idx].id}></Input>
                                 ))}
-                                {/* <Input type="hidden" {...register('player1')} value={players[0].id}></Input>
-                                <Input type="hidden" {...register('player2')} value={players[1].id}></Input>
-                                <Input type="hidden" {...register('player3')} value={players[2].id}></Input>
-                                <Input type="hidden" {...register('player4')} value={players[3].id}></Input> */}
                                 {game && <Input type="hidden" {...register('gameID')} value={game.id}></Input>}
                                 <Table.Root size="sm">
                                     <Table.Header>
