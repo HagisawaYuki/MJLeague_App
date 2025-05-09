@@ -47,7 +47,7 @@ export default function Home() {
                     <Input 
                         type="text" 
                         bg="white" 
-                        placeholder="Email"
+                        placeholder="username"
                         value={name}
                         onChange={(e) => {
                             setName(e.target.value);
