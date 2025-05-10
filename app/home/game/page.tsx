@@ -161,9 +161,9 @@ export default function Home() {
                                 {row.map((score, colIndex) => (
                                     <Table.Cell key={colIndex} textAlign="center" onClick={() => {onSubmit(score.scoreID, score.score, score.chip)}}>
                                         <Box textAlign="center">
-                                        <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"}>{score.score}</Text>
-                                        <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}</Text>
-                                        <Text color={score.score + score.chip*100 < 0 ? "red" : score.score + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.score + score.chip*100}</Text>
+                                        <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"}>{score.score/50}pt</Text>
+                                        <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}枚</Text>
+                                        <Text color={score.score + score.chip*100 < 0 ? "red" : score.score + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.score + score.chip*100}pt</Text>
                                         </Box>
                                     </Table.Cell>
                                 ))}
@@ -176,9 +176,9 @@ export default function Home() {
                             {sumScores && sumScores.map((score, colIndex) => (
                                 <Table.Cell key={colIndex} textAlign="center">
                                     <Box textAlign="center">
-                                        <Text color={score.sumScore < 0 ? "red" : score.sumScore === 0 ? "black" : "blue"}>{score.sumScore}</Text>
-                                        <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}</Text>
-                                        <Text color={score.sumScore + score.chip*100 < 0 ? "red" : score.sumScore + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.sumScore + score.chip*100}</Text>
+                                        <Text color={score.sumScore < 0 ? "red" : score.sumScore === 0 ? "black" : "blue"}>{score.sumScore/50}pt</Text>
+                                        <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}枚</Text>
+                                        <Text color={score.sumScore + score.chip*100 < 0 ? "red" : score.sumScore + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.sumScore + score.chip*100}pt</Text>
                                     </Box>
                                 </Table.Cell>
                             ))}
