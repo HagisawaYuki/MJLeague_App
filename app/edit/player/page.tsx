@@ -34,9 +34,7 @@ export default function Home() {
             </Box>
             <Box>
                 <form action={editPlayerName}>
-                    
                     <Input type="hidden" {...register('playerID')} value={playerID}></Input>
-                    
                     <Input
                         width="100%"
                         bg="white"
@@ -54,7 +52,6 @@ export default function Home() {
                 </form>
             </Box>
         </Box>
-        
     </Box>
   );
 }

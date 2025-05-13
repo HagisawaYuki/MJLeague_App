@@ -124,10 +124,8 @@ export default function Create() {
                 </Box>
                 <Box marginTop="4%">
                     <form action={createGame}>
-                        {/* <Box hidden> */}
-                            <Input type="hidden" {...register('isPlayers')} value={isSelectPlayer ? "1" : "0"}></Input>
-                            <Input type="hidden" {...register('userId')} value={userID}></Input>
-                        {/* </Box> */}
+                        <Input type="hidden" {...register('isPlayers')} value={isSelectPlayer ? "1" : "0"}></Input>
+                        <Input type="hidden" {...register('userId')} value={userID}></Input>
                         <Box>
                             <Text fontSize="2xl" as="b">日付を選択</Text>
                         </Box>
@@ -140,7 +138,6 @@ export default function Create() {
                                 width="40%"
                             ></Input>
                         </Box>
-                        
                         <Box marginLeft="5%" marginTop="2%">
                             <Button type="submit"  colorPalette="orange" variant="subtle">
                                 完了

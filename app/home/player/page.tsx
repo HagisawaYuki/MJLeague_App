@@ -37,8 +37,6 @@ export default function Home() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [playerName, setPlayerName] = useState<string>();
-  // const [playerID, setPlayerID] = useState<number>();
-  // const [player, setPlayer] = useState<PlayerWithHanshuangScore>();
   const [dataTable, setDataTable] = useState<DataTable>();
   const createDataTable = (games: GameWithHanshuangsAndScores[], player: PlayerWithHanshuangScore) => {
     let pointCount = 0;
@@ -98,10 +96,8 @@ export default function Home() {
         const _playerName = localStorage.getItem("editPlayerName");
         const _playerID = Number(localStorage.getItem("editPlayerID"));
         if(_playerName) setPlayerName(JSON.parse(_playerName));
-        // setPlayerID(localPlayerID);
         //playerIDからPlayer情報を取り出す。
         const _player = await searchPlayerByID(_playerID);
-        // setPlayer(_player);
         const _userID = await searchUserIDByName(session.user.name);
         const _game = await searchGamesByUserID(_userID);
         createDataTable(_game, _player);
@@ -158,14 +154,11 @@ export default function Home() {
                   <Table.Cell>{dataTable?.secondPer}%</Table.Cell>
                   <Table.Cell>{dataTable?.thirdPer}%</Table.Cell>
                   <Table.Cell>{dataTable?.fourthPer}%</Table.Cell>
-                </Table.Row>
-                
-                
+                </Table.Row>                
               </Table.Body>
             </Table.Root>
           </Box>
         </Box>
-        
     </Box>
   );
 }

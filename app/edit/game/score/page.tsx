@@ -11,7 +11,6 @@ export default function Home() {
     const [score, setScore] = useState<number>();
     const [chip, setChip] = useState<number>();
     
-
     const {
         register,
         // formState: { errors },

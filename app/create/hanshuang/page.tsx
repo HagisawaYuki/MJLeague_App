@@ -259,18 +259,6 @@ export default function Create() {
                                 {registerName.chips.map((regname, idx) => (
                                     <Input type="hidden" key={idx} {...register(regname)} value={Number(chips[idx])}></Input>
                                 ))}
-                                {/* <Input type="hidden" {...register('player1')} value={players[0].id}></Input>
-                                <Input type="hidden" {...register('player2')} value={players[1].id}></Input>
-                                <Input type="hidden" {...register('player3')} value={players[2].id}></Input>
-                                <Input type="hidden" {...register('player4')} value={players[3].id}></Input>
-                                <Input type="hidden" {...register('score1')} value={points[0]}></Input>
-                                <Input type="hidden" {...register('score2')} value={points[1]}></Input>
-                                <Input type="hidden" {...register('score3')} value={points[2]}></Input>
-                                <Input type="hidden" {...register('score4')} value={points[3]}></Input>
-                                <Input type="hidden" {...register('chip1')} value={Number(chips[0])}></Input>
-                                <Input type="hidden" {...register('chip2')} value={Number(chips[1])}></Input>
-                                <Input type="hidden" {...register('chip3')} value={Number(chips[2])}></Input>
-                                <Input type="hidden" {...register('chip4')} value={Number(chips[3])}></Input> */}
                                 {game && <Input type="hidden" {...register('gameID')} value={game.id}></Input>}
                                 <Box>
                                     <Button type="submit" colorPalette="orange" variant="subtle">

@@ -18,7 +18,6 @@ type HanshuangsTable = {
 
 export default function Home() {
     const router = useRouter();
-    // const [game, setGame] = useState<GameWithHanshuangsAndScores>();
     const [hanshuangsTable, setHanshuangsTable] = useState<HanshuangsTable>();
     const [t_hanshuangsTable, setT_HanshuangsTable] = useState<{scoreID: number, score: number, chip: number}[][]>();
     const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
@@ -161,14 +160,27 @@ export default function Home() {
                                 {row.map((score, colIndex) => (
                                     <Table.Cell key={colIndex} textAlign="center" onClick={() => {onSubmit(score.scoreID, score.score, score.chip)}}>
                                         <Box textAlign="center">
-                                        <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"}>{score.score/50}pt</Text>
-                                        <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}枚</Text>
-                                        <Text color={score.score + score.chip*100 < 0 ? "red" : score.score + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.score + score.chip*100}pt</Text>
+                                            <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"}>{score.score/50}pt</Text>
+                                            {/* <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}枚</Text> */}
+                                            <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"} as="b">{score.score}pt</Text>
+                                            {/* <Text color={score.score + score.chip*100 < 0 ? "red" : score.score + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.score + score.chip*100}pt</Text> */}
                                         </Box>
                                     </Table.Cell>
                                 ))}
                             </Table.Row>
                         ))}
+                        <Table.Row>
+                            <Table.Cell textAlign="center">
+                                <Text as="b">チップ数</Text>
+                            </Table.Cell>
+                            {t_hanshuangsTable && t_hanshuangsTable[t_hanshuangsTable.length-1].map((score, colIndex) => (
+                                <Table.Cell key={colIndex} textAlign="center">
+                                    <Box textAlign="center">
+                                        <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}枚</Text>
+                                    </Box>
+                                </Table.Cell>
+                            ))}
+                        </Table.Row>
                         <Table.Row>
                             <Table.Cell textAlign="center">
                                 <Text as="b">合計値</Text>

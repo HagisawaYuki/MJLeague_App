@@ -23,7 +23,6 @@ export const searchPlayerByID = async (id: number): Promise<PlayerWithHanshuangS
 
 //userID、nameからプレイヤー情報を新規作成する関数
 export const createPlayer = async (formData: FormData) => {
-    
     //formDataから入力された名前を取り出す
     const name = formData.get('name') as string;
     const userId = formData.get("userId") as string;

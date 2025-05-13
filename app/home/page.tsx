@@ -92,10 +92,6 @@ export default function Home() {
         //各プレイヤーの通算を計算する
         calSum(_gamesTable);
       }
-      // else{
-        //session情報がなければログイン画面へ
-        // router.push("/login");
-      // }
     }
     initHome();
     
