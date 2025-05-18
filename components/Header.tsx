@@ -11,6 +11,7 @@ export default function Header() {
   const menus = [
     {text: "プレイヤー追加", href: "/create/player"},
     {text: "ゲーム作成", href: "/create/game"},
+    {text: "点数表", href: "/mjscore"},
   ]
 
   return (
