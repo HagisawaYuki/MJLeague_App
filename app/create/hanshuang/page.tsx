@@ -43,6 +43,15 @@ export default function Create() {
         // formState: { errors },
     } = useForm<formData>();
 
+    const checkScores = (): boolean => {
+        let sumScores = 0;
+        for(const _score of scores){
+            const score = Number(_score);
+            sumScores += score;
+        }
+        return sumScores === 100000;
+    }
+
     useEffect(() => {
         const createHanshuangInit = async () => {
             //localStorageから試合するプレイヤーのidを取り出す
@@ -249,6 +258,7 @@ export default function Create() {
                                 
                             </Table.Body>
                         </Table.Root>
+                        {checkScores() === false && <Text color="red">点数が正しくないです</Text>}
                         {players && 
                             <form action={createHanshuangScores}>
                                 {registerName.players.map((regname, idx) => (
