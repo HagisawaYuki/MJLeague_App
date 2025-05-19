@@ -72,18 +72,18 @@ export default function Create() {
     //ウマオカ、レートを計算
     useEffect(() => {
         //五捨六入する関数
-        const roundToFiveSix = (value: number): number => {
-            const integer = Math.floor(value);
-            const decimal = value - integer;
+        // const roundToFiveSix = (value: number): number => {
+        //     const integer = Math.floor(value);
+        //     const decimal = value - integer;
           
-            const tenth = Math.floor(decimal * 10);
+        //     const tenth = Math.floor(decimal * 10);
           
-            if (tenth <= 5) {
-              return Math.floor(value);
-            } else {
-              return Math.ceil(value);
-            }
-        }
+        //     if (tenth <= 5) {
+        //       return Math.floor(value);
+        //     } else {
+        //       return Math.ceil(value);
+        //     }
+        // }
         //ウマオカ、レート定義
         const uma = [20000, 10000, -10000, -20000];
         const oka = [20000, 0, 0, 0];
@@ -101,7 +101,8 @@ export default function Create() {
         // 元のインデックス順を表す配列
         const sortedIndices = indexed.map(item => item.index);
 
-        const afterUmaOkaScores = sortedScores.map((score, i) => roundToFiveSix((score + uma[i] + oka[i] - 30000) / 1000) * rate);
+        // const afterUmaOkaScores = sortedScores.map((score, i) => roundToFiveSix((score + uma[i] + oka[i] - 30000) / 1000) * rate);
+        const afterUmaOkaScores = sortedScores.map((score, i) => (score + uma[i] + oka[i] - 30000) / 1000 * rate);
 
         const originalOrderScores: number[] = [];
 
