@@ -12,6 +12,7 @@ export default function Header() {
     {text: "プレイヤー追加", href: "/create/player"},
     {text: "ゲーム作成", href: "/create/game"},
     {text: "点数表", href: "/mjscore"},
+    {text: "スコア計算", href: "/calscore"},
   ]
 
   return (
