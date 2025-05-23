@@ -14,12 +14,12 @@ export default function RootLayout({
       
       <body>
         <Suspense>
-      <Providers>
-        <Provider>
-        <Header></Header>
-        {children}
-        </Provider>
-        </Providers>
+          <Providers>
+            <Provider>
+              <Header></Header>
+              {children}
+            </Provider>
+          </Providers>
         </Suspense>
       </body>
     </html>

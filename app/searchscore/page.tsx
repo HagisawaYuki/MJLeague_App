@@ -187,8 +187,8 @@ export default function Home() {
                 <NumberInput.Input />
                 </NumberInput.Root>
             </Box>
-            <Box>
-                <Text>{score}</Text>
+            <Box bg="#EEE" width="20%" marginTop="2%" display="flex" justifyContent="flex-end" >
+                <Text fontSize="xl" as="b" marginRight="5%">{score}</Text>
             </Box>
         </Box>
     </Box>
