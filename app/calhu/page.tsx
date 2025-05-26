@@ -37,7 +37,7 @@ export default function Home() {
     <Box display="flex" justifyContent="center">
         <Box marginTop="5%" width="100%">
             <Text as="b" fontSize="2xl">符計算</Text>
-            <Box>
+            <Box marginLeft="2%">
                 <Box marginTop="2%">
                     <Text as="b" fontSize="xl">アガリ方</Text>
                     <RadioGroup.Root value={agari} onValueChange={(e) => setAgari(e.value ? e.value : "0")}>
@@ -131,7 +131,7 @@ export default function Home() {
                     ))}
                 </Box>
             </Box>
-            <Box bg="#EEE" width="20%" marginTop="2%" display="flex" justifyContent="flex-end" >
+            <Box bg="#EEE" width="40%" marginTop="2%" display="flex" justifyContent="flex-end" >
                 <Text fontSize="xl" as="b" marginRight="5%">{hu}符</Text>
                 <Text fontSize="xl" as="b" marginRight="5%">→</Text>
                 <Text fontSize="xl" as="b" marginRight="5%">{Math.ceil(hu / 10) * 10}符</Text>
