@@ -13,6 +13,7 @@ export default function Header() {
     {text: "ゲーム作成", href: "/create/game"},
     {text: "点数表", href: "/mjscore"},
     {text: "スコア計算", href: "/calscore"},
+    {text: "符計算", href: "/calhu"},
     {text: "スコア検索", href: "/searchscore"},
     {text: "マニュアル", href: "/manual"},
   ]
