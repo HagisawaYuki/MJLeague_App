@@ -128,7 +128,7 @@ export default function Home() {
                 >
                     半荘を追加
                 </Button>
-                {/* <Button
+                <Button
                     colorPalette="orange" variant="subtle"
                     onClick={() => {
                     localStorage.setItem("gameID", JSON.stringify(game?.id));
@@ -136,7 +136,7 @@ export default function Home() {
                     }}
                 >
                     プレイヤーを変更
-                </Button> */}
+                </Button>
             </Box>
             <Box>
                 <Table.Root size="sm" striped showColumnBorder>
