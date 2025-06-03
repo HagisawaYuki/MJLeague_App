@@ -131,7 +131,7 @@ export default function Home() {
                 <Button
                     colorPalette="orange" variant="subtle"
                     onClick={() => {
-                    localStorage.setItem("gameID", JSON.stringify(game?.id));
+                    // localStorage.setItem("gameID", JSON.stringify(game?.id));
                     router.push("/edit/game/player");
                     }}
                 >
