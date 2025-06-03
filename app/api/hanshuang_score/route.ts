@@ -33,11 +33,6 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
     //reqから入力された名前、userIDを取り出す
     const { id, score, chip, playerId, hanshuangId } = await req.json();
-    console.log("id: ", id);
-    console.log("score: ", score);
-    console.log("chip: ", chip);
-    console.log("playerId: ", playerId);
-    console.log("hanshuangId: ", hanshuangId);
     if (!id || score === undefined || chip === undefined || !playerId || !hanshuangId) {
         return new Response("Missing id or name", { status: 400 });
     }

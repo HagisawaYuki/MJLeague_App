@@ -56,14 +56,24 @@ export const editHanshuangScore = async (formData: FormData) => {
     const id = Number(formData.get('scoreID'));
     const score = Number(formData.get("score"));
     const chip = Number(formData.get('chip'));
-    console.log("scoreID: ", id);
-    console.log("score: ", score)
-    console.log("chip: ", chip)
     const _hanshuangScore = await searchHanshuangScoreByID(id);
     const playerId = _hanshuangScore.playerId;
     const hanshuangId = _hanshuangScore.hanshuangId;
-    console.log("playerId: ", playerId)
-    console.log("hanshuangId: ", hanshuangId)
+    await fetch('/api/hanshuang_score', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, score, chip, playerId, hanshuangId }),
+    });
+    redirect("/home/game");
+}
+
+//gameのplayerを編集
+export const editHanshuangScorePlayer = async (playerId: number, hanshuangScore: HanshuangScore) => {
+    //formDataから入力された名前を取り出す
+    const id = hanshuangScore.id
+    const score = hanshuangScore.score
+    const chip = hanshuangScore.chip
+    const hanshuangId = hanshuangScore.hanshuangId;
     await fetch('/api/hanshuang_score', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
