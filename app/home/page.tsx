@@ -166,9 +166,9 @@ export default function Home() {
               {row.map((score, colIndex) => (
                 <Table.Cell key={colIndex} textAlign="center">
                   <Box textAlign="center">
-                    <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"}>{score.score/50}pt</Text>
-                    <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.chip}枚</Text>
-                    <Text color={score.score + score.chip*100 < 0 ? "red" : score.score + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.score + score.chip*100}pt</Text>
+                    <Text color={score.score < 0 ? "red" : score.score === 0 ? "black" : "blue"}>{score.score === 0 ? "-" : score.score/50 + "pt"}</Text>
+                    <Text color={score.chip < 0 ? "red" : score.chip === 0 ? "black" : "blue"}>{score.score === 0 ? "-" : score.chip + "枚"}</Text>
+                    <Text color={score.score + score.chip*100 < 0 ? "red" : score.score + score.chip*100 === 0 ? "black" : "blue"} as="b">{score.score === 0 ? "-" : score.score + score.chip*100 + "pt"}</Text>
                   </Box>
                 </Table.Cell>
               ))}
