@@ -19,7 +19,8 @@ const dataTableHeader2 = [
   {name: "1着率"},
   {name: "2着率"},
   {name: "3着率"},
-  {name: "4着率"}
+  {name: "4着率"},
+  {name: "飛び率"}
 ];
 
 type DataTable = {
@@ -31,7 +32,11 @@ type DataTable = {
   secondPer: number;
   thirdPer: number;
   fourthPer: number;
+  minusPer: number;
 }
+
+const rate = 50;
+const uma = [-20, -10, 10, 20];
 
 export default function Home() {
   const router = useRouter();
@@ -57,9 +62,9 @@ export default function Home() {
         }
       }
     }
-    console.log(gameCount);
     //配列に1,2,3,4位数を格納
     const _rankCount: number[] = [0,0,0,0];
+    let minusPointCount: number = 0;
     for(const game of games){
       for(const hanshuang of game.hanshuangs){
         if(hanshuang.scores.some(score => score.playerId === player.id)){
@@ -71,12 +76,19 @@ export default function Home() {
           scores.forEach((score, idx) => {
             if(score.playerId === player.id){
               _rankCount[idx] += 1;
+              if(idx !== 0){
+                const _score = (score.score / rate) + uma[idx] + 30;
+                if(_score < 0){
+                  minusPointCount += 1;
+                }
+              }
             }
           })
         }
       }
     }
     const rankCount = _rankCount.map(count => Math.round(count / gameCount * 100 * 100) / 100);
+    const minusPointPer = Math.round(minusPointCount / gameCount * 100 * 100) / 100;
     const _dataTable: DataTable = {
       totalPoint: pointCount + chipCount * 100,
       pointCount: pointCount,
@@ -86,6 +98,7 @@ export default function Home() {
       secondPer: rankCount[1],
       thirdPer: rankCount[2],
       fourthPer: rankCount[3],
+      minusPer: minusPointPer
     }
     setDataTable(_dataTable);
   }
@@ -154,6 +167,7 @@ export default function Home() {
                   <Table.Cell>{dataTable?.secondPer}%</Table.Cell>
                   <Table.Cell>{dataTable?.thirdPer}%</Table.Cell>
                   <Table.Cell>{dataTable?.fourthPer}%</Table.Cell>
+                  <Table.Cell>{dataTable?.minusPer}%</Table.Cell>
                 </Table.Row>                
               </Table.Body>
             </Table.Root>

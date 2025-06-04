@@ -26,6 +26,31 @@ export default function Home() {
   const [gamesTable, setGamesTable] = useState<GamesTable>();
   const [t_gamesTable, setT_GamesTable] = useState<{game: GameWithHanshuangsAndScores, score: number, chip: number}[][]>();
   const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
+  const [scoreCheckMessage, setScoreCheckMessage] = useState<string>("");
+
+  //スコアチェック
+  const checkScores = () => {
+    let sumScore = 0;
+    let sumChip = 0;
+    if(sumScores){
+      for(const score of sumScores){
+        sumScore += score.sumScore;
+        sumChip += score.chip;
+      }
+    }
+    if(sumScore !== 0 && sumChip !== 0){
+      setScoreCheckMessage(`スコアに${sumScore}pt, チップに${sumChip}枚ズレがあります`);
+    }
+    else if(sumScore !== 0){
+      setScoreCheckMessage(`スコアに${sumScore}ptズレがあります`);
+    }
+    else if(sumChip !== 0){
+      setScoreCheckMessage(`チップに${sumChip}枚ズレがあります`);
+    }
+    else{
+      setScoreCheckMessage(`問題ありません`);
+    }
+  }
 
   //Game情報からプレイヤーごとにテーブル形式で配列にまとめる関数
   const createGameTable = (games: GameWithHanshuangsAndScores[], players: PlayerWithHanshuangScore[]) => {
@@ -104,6 +129,12 @@ export default function Home() {
   
   return (
     <Box>
+      <Box>
+        <Button onClick={checkScores}>
+          <Text>スコアチェック</Text>
+        </Button>
+        <Text>{scoreCheckMessage}</Text>
+      </Box>
       <Table.Root size="sm" striped showColumnBorder>
         <Table.Header>
           <Table.Row>
