@@ -111,7 +111,7 @@ export default function Create() {
         const sortedIndices = indexed.map(item => item.index);
 
         // const afterUmaOkaScores = sortedScores.map((score, i) => roundToFiveSix((score + uma[i] + oka[i] - 30000) / 1000) * rate);
-        const afterUmaOkaScores = sortedScores.map((score, i) => (score + uma[i] + oka[i] - 30000) / 1000 * rate);
+        const afterUmaOkaScores = sortedScores.map((score, i) => Math.round((score + uma[i] + oka[i] - 30000) / 1000 * rate));
 
         const originalOrderScores: number[] = [];
 
