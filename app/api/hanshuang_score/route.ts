@@ -48,3 +48,11 @@ export async function PUT(req: NextRequest) {
     });
     return NextResponse.json(updatedScore);
 }
+
+//HanshuangScore削除
+export async function DELETE(req: NextRequest) {
+  const { id } = await req.json();
+  await prisma.hanshuangScore.delete({
+      where: { id },
+  })
+}

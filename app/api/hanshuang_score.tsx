@@ -10,6 +10,13 @@ export const searchHanshuangScoreByID = async (id: number): Promise<HanshuangSco
     return data;
 };
 
+//gameIDから全半荘情報を取得する関数
+export const searchHanshuangScoresByHanshuangID = async (hanshuangID: number): Promise<HanshuangScore[]> => {
+    const res = await fetch(`/api/hanshuang_scores?hanshuangId=${hanshuangID}`);
+    const data: HanshuangScore[] = await res.json();
+    return data;
+};
+
 //userID、nameからプレイヤー情報を新規作成する関数
 export const createHanshuangScores = async (formData: FormData) => {
     //formDataからplayers・scores・chipsを取り出して配列に保管
@@ -80,4 +87,14 @@ export const editHanshuangScorePlayer = async (playerId: number, hanshuangScore:
         body: JSON.stringify({ id, score, chip, playerId, hanshuangId }),
     });
     redirect("/home/game");
+}
+
+//HanshunagScoreを削除する関数
+export const deleteHanshuangScoreByHanshuangID = async (hanshuangId: number) => {
+    console.log("hanshuangID2: ", hanshuangId)
+    await fetch('/api/hanahuang_scores', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hanshuangId }),
+    });
 }

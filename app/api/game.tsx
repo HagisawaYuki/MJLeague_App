@@ -2,6 +2,7 @@
 
 import { Prisma } from "@prisma/client"
 import { redirect } from "next/navigation";
+// import { deleteHanshuang, searchHanshuangsByGameID } from "./hanshuang";
 //hanshuangs情報とscores情報を含んだGameの型
 export type GameWithHanshuangsAndScores = Prisma.GameGetPayload<{
   include: {
@@ -40,4 +41,16 @@ export const createGame = async (formData: FormData) => {
       body: JSON.stringify({ userId, isPlayers, date }),
   });
   redirect("/home");
+}
+
+//選択されたゲームを削除する関数
+export const deleteGame = async (ids: number[]) => {
+  for(const id of ids){    
+    await fetch('/api/game', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+    });
+  }
+  window.location.reload();
 }

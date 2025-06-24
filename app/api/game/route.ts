@@ -38,3 +38,25 @@ export async function POST(req: NextRequest) {
     })
   }
 }
+
+//Game削除
+export async function DELETE(req: NextRequest) {
+  const { id } = await req.json();
+  // 1. まず関連する HanshuangScore を削除
+  const hanshuangs = await prisma.hanshuang.findMany({ where: { gameId: id } });
+
+  for (const hanshuang of hanshuangs) {
+    await prisma.hanshuangScore.deleteMany({
+      where: { hanshuangId: hanshuang.id },
+    });
+  }
+
+  // 2. 次に Hanshuang を削除
+  await prisma.hanshuang.deleteMany({
+    where: { gameId: id },
+  });
+  await prisma.game.delete({
+      where: { id },
+  })
+  return NextResponse.json(true);
+}

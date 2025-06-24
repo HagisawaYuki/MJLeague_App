@@ -14,3 +14,16 @@ export async function POST(req: NextRequest) {
     })
     return NextResponse.json(hanshuang);
 }
+
+//Hanshuang削除
+export async function DELETE(req: NextRequest) {
+    const { id } = await req.json();
+    await prisma.hanshuangScore.deleteMany({
+      where: { hanshuangId: id },
+    });
+    // 2. 次に Hanshuang を削除
+    await prisma.hanshuang.deleteMany({
+        where: { id },
+    });
+  
+}

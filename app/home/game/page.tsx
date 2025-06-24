@@ -1,7 +1,7 @@
 "use client"
 
-import { Box, Button, Table, Text } from "@chakra-ui/react";
-import { HanshuangWithHanshuangScore } from "../../api/hanshuang";
+import { Box, Button, Checkbox, Table, Text } from "@chakra-ui/react";
+import { deleteHanshuang, HanshuangWithHanshuangScore } from "../../api/hanshuang";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { searchGameByID } from "../../api/game";
@@ -13,14 +13,24 @@ type HanshuangsTable = {
       scoreID: number;
       score: number;
       chip: number;
+      hanshuangID: number;
     }[];
 }[];
 
 export default function Home() {
     const router = useRouter();
     const [hanshuangsTable, setHanshuangsTable] = useState<HanshuangsTable>();
-    const [t_hanshuangsTable, setT_HanshuangsTable] = useState<{scoreID: number, score: number, chip: number}[][]>();
+    const [t_hanshuangsTable, setT_HanshuangsTable] = useState<{scoreID: number, score: number, chip: number, hanshuangID: number}[][]>();
     const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
+    const [isDelete, setIsDelete] = useState<boolean>(false);
+    const [deletingHanshuangsID, setDeletingHanshuangsID] = useState<number[]>();
+
+    //ゲーム削除関数
+      const deleteHanshuangButton = () => {
+        if(deletingHanshuangsID){
+          deleteHanshuang(deletingHanshuangsID);
+        }
+      }
 
     //各プレイヤーの通算を計算する関数
     const calSum = (_hanshuangsTable: HanshuangsTable) => {
@@ -42,13 +52,13 @@ export default function Home() {
         //playerごとにループ
         return players.map(player => {
             //1playerの全スコアの配列
-            const scores: {scoreID: number; score: number, chip: number}[] = [];
+            const scores: {scoreID: number; score: number, chip: number, hanshuangID: number}[] = [];
             //gameごとにループ
             for (const hanshuang of hanshuangs) {
                 // 1つのゲームに含まれるすべての半荘
                 const scoreEntry = hanshuang.scores.find(score => score.playerId === player.id);
                 if (scoreEntry) {
-                scores.push({scoreID: scoreEntry.id, score: scoreEntry.score, chip: scoreEntry.chip});
+                scores.push({scoreID: scoreEntry.id, score: scoreEntry.score, chip: scoreEntry.chip, hanshuangID: scoreEntry.hanshuangId});
                 }
             }
             return {
@@ -92,14 +102,7 @@ export default function Home() {
             
                     const _hanshuangsTable = createHanshuangTable(_hanshuangs, _players);
                     setHanshuangsTable(_hanshuangsTable);
-                    _hanshuangsTable.forEach((player, idx) => {
-                        console.log("index", idx);
-                        console.log("name", player.name);
-                        player.scores.forEach((score) => {
-                            console.log("score", score.score);
-                            console.log("chip", score.chip);
-                        })
-                    })
+                    
                     //scoresの長さを計算（ゲーム数）
                     const numRows = _hanshuangsTable[0]?.scores.length || 0;
                     // 縦横反転して保存
@@ -119,7 +122,7 @@ export default function Home() {
   
     return (
         <Box>
-            <Box>
+            <Box display="flex">
                 <Button
                     colorPalette="orange" variant="subtle"
                     onClick={() => {
@@ -131,12 +134,24 @@ export default function Home() {
                 <Button
                     colorPalette="orange" variant="subtle"
                     onClick={() => {
-                    // localStorage.setItem("gameID", JSON.stringify(game?.id));
-                    router.push("/edit/game/player");
+                        router.push("/edit/game/player");
                     }}
                 >
                     プレイヤーを変更
                 </Button>
+                <Box>
+                    <Button onClick={() => {if(isDelete){setIsDelete(false)}else{setIsDelete(true)}}}>
+                        <Text>半荘削除</Text>
+                    </Button>
+                    <Text>{deletingHanshuangsID}</Text>
+                </Box>
+                {isDelete && 
+                    <Box>
+                        <Button bg="red" onClick={deleteHanshuangButton}>
+                        <Text>削除</Text>
+                        </Button>
+                    </Box>
+                }
             </Box>
             <Box>
                 <Table.Root size="sm" striped showColumnBorder>
@@ -155,6 +170,39 @@ export default function Home() {
                         {t_hanshuangsTable?.map((row, rowIndex) => (
                             <Table.Row key={rowIndex}>
                                 <Table.Cell textAlign="center">
+                                    {isDelete && 
+                                        <Checkbox.Root 
+                                            variant="subtle"
+                                            key={rowIndex}
+                                            onCheckedChange={(details) => {
+                                                const isChecked = details.checked;
+                                                if(isChecked){
+                                                    //すでにselectされていたら追加して保存
+                                                    if(deletingHanshuangsID){
+                                                        setDeletingHanshuangsID([...deletingHanshuangsID, row[0].hanshuangID])
+                                                    }
+                                                    //selecyされていなかったら新規追加して保存
+                                                    else{
+                                                        setDeletingHanshuangsID([row[0].hanshuangID]);
+                                                    }
+                                                }
+                                                //チェックがついていなかったら
+                                                else{
+                                                    //selectされているか調べ、すでにselectされているものであったら、配列から削除
+                                                    if(deletingHanshuangsID?.includes(row[0].hanshuangID)){
+                                                        setDeletingHanshuangsID(
+                                                            deletingHanshuangsID.filter((deletingHanshuangsID) => (deletingHanshuangsID !== row[0].hanshuangID))
+                                                        )
+                                                    }
+                                                }
+                                        }}>
+                                            <Checkbox.HiddenInput />
+                                            <Checkbox.Control />
+                                            <Checkbox.Label>
+                                                
+                                            </Checkbox.Label>
+                                        </Checkbox.Root>
+                                    }
                                     <Text as="b">{rowIndex + 1}</Text>
                                 </Table.Cell>
                                 {row.map((score, colIndex) => (

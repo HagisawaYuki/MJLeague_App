@@ -1,12 +1,12 @@
 "use client"
 
-import { Box, Button, Table, Text } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Table, Text } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { searchUserIDByName } from "../api/user";
 import { PlayerWithHanshuangScore, searchAllPlayersByUserID } from "../api/player";
 import { useRouter } from "next/navigation";
-import { GameWithHanshuangsAndScores, searchGamesByUserID } from "../api/game";
+import { deleteGame, GameWithHanshuangsAndScores, searchGamesByUserID } from "../api/game";
 import { RiArrowRightLine } from "react-icons/ri";
 
 type GamesTable = {
@@ -27,6 +27,8 @@ export default function Home() {
   const [t_gamesTable, setT_GamesTable] = useState<{game: GameWithHanshuangsAndScores, score: number, chip: number}[][]>();
   const [sumScores, setSumScores] = useState<{name: string; sumScore: number; chip: number}[]>();
   const [scoreCheckMessage, setScoreCheckMessage] = useState<string>("");
+  const [isDelete, setIsDelete] = useState<boolean>(false);
+  const [deletingGamesID, setDeletingGamesID] = useState<number[]>();
 
   //スコアチェック
   const checkScores = () => {
@@ -49,6 +51,13 @@ export default function Home() {
     }
     else{
       setScoreCheckMessage(`問題ありません`);
+    }
+  }
+
+  //ゲーム削除関数
+  const deleteGameButton = () => {
+    if(deletingGamesID){
+      deleteGame(deletingGamesID);
     }
   }
 
@@ -129,11 +138,27 @@ export default function Home() {
   
   return (
     <Box>
-      <Box>
-        <Button onClick={checkScores}>
-          <Text>スコアチェック</Text>
-        </Button>
-        <Text>{scoreCheckMessage}</Text>
+      <Box display="flex">
+        <Box>
+          <Button onClick={checkScores}>
+            <Text>スコアチェック</Text>
+          </Button>
+          <Text>{scoreCheckMessage}</Text>
+        </Box>
+        <Box>
+          <Button onClick={() => {if(isDelete){setIsDelete(false)}else{setIsDelete(true)}}}>
+            <Text>ゲーム削除</Text>
+          </Button>
+          <Text>{deletingGamesID}</Text>
+        </Box>
+        {isDelete && 
+          <Box>
+            <Button bg="red" onClick={deleteGameButton}>
+              <Text>削除</Text>
+            </Button>
+          </Box>
+        }
+        
       </Box>
       <Table.Root size="sm" striped showColumnBorder>
         <Table.Header>
@@ -157,10 +182,46 @@ export default function Home() {
         <Table.Body>
           {t_gamesTable?.map((row, rowIndex) => (
             <Table.Row key={rowIndex} onClick={() => {
-              localStorage.setItem("gameID", JSON.stringify(row[0].game.id));
-              router.push("/home/game")
+              if(!isDelete){
+                localStorage.setItem("gameID", JSON.stringify(row[0].game.id));
+                router.push("/home/game")
+              }
+              
             }}>
               <Table.Cell textAlign="center">
+                {isDelete && 
+                <Checkbox.Root 
+                  variant="subtle"
+                  key={rowIndex}
+                  onCheckedChange={(details) => {
+                      const isChecked = details.checked;
+                      if(isChecked){
+                          //すでにselectされていたら追加して保存
+                          if(deletingGamesID){
+                              setDeletingGamesID([...deletingGamesID, row[0].game.id])
+                          }
+                          //selecyされていなかったら新規追加して保存
+                          else{
+                              setDeletingGamesID([row[0].game.id]);
+                          }
+                      }
+                      //チェックがついていなかったら
+                      else{
+                          //selectされているか調べ、すでにselectされているものであったら、配列から削除
+                          if(deletingGamesID?.includes(row[0].game.id)){
+                              setDeletingGamesID(
+                                  deletingGamesID.filter((deletingGameID) => (deletingGameID !== row[0].game.id))
+                              )
+                          }
+                      }
+                  }}>
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control />
+                      <Checkbox.Label>
+                          
+                      </Checkbox.Label>
+                  </Checkbox.Root>
+                }
                 <Text as="b">{row[0].game.date}</Text>
               </Table.Cell>
               {row.map((score, colIndex) => (
