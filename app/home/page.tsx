@@ -146,6 +146,11 @@ export default function Home() {
           <Text>{scoreCheckMessage}</Text>
         </Box>
         <Box>
+          <Button onClick={() => {router.push("/home/league")}}>
+            <Text>リーグ成績</Text>
+          </Button>
+        </Box>
+        <Box>
           <Button onClick={() => {if(isDelete){setIsDelete(false)}else{setIsDelete(true)}}}>
             <Text>ゲーム削除</Text>
           </Button>
