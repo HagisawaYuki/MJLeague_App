@@ -142,7 +142,7 @@ export default function Home() {
             }
         }
         const rankCount = _rankCount.map(count => Math.round(count / gameCount * 100 * 100) / 100);
-        playerFirstSecondPer.push({name: player.name, value: Math.round(rankCount[0] + rankCount[1] * 100) / 100});
+        playerFirstSecondPer.push({name: player.name, value: Math.round((rankCount[0] + rankCount[1]) * 100) / 100});
     }
     playerFirstSecondPer.sort((a, b) => b.value - a.value);
     return playerFirstSecondPer;
