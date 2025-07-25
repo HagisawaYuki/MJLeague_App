@@ -146,7 +146,7 @@ export default function Home() {
           <Text>{scoreCheckMessage}</Text>
         </Box>
         <Box>
-          <Button onClick={() => {router.push("/home/league")}}>
+          <Button onClick={() => {router.push("/home/league_v2")}}>
             <Text>リーグ成績</Text>
           </Button>
         </Box>
